@@ -1,0 +1,36 @@
+main
+	declare fd variable with return from open file, flag read only
+	while loop: while line =! null, get_next_line(fd) and print it
+	free line
+	
+	
+char *get next line(fd)
+	check errors (fd, buffer, file is readeable fd)
+	read fd and add buffer to linked list()
+	stash to string line
+	return line
+	
+	
+	
+void read fd and add buffer to linked list(fd, stash)
+
+	while no newline and characters are read ()
+		malloc a buffer
+		check errors (malloc)
+			return
+		read(fd into buffer,  a buffer size amount)
+			into an int variable 
+		check errors (if file is empty or error while reading)
+			return
+		end buffer with nul
+		add buffer to stash(stush, buffer, chars read)
+		free buffer
+
+void add to stash
+	new node
+	new node -> content = buffer
+	if stash is empty, add new node as first
+	else add new node as last
+	
+
+	
