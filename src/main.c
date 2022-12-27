@@ -1,4 +1,6 @@
-#include <fcntl.h>
+#include "../include/get_next_line.h"
+#include <fcntl.h> // open
+#include <stdio.h> // printf, to remove later
 
 int main()
 {
