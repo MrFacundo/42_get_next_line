@@ -32,5 +32,5 @@ void add to stash
 	if stash is empty, add new node as first
 	else add new node as last
 	
-
+gcc main.c get_next_line.c get_next_line_utils.c ../include/get_next_line.h -o main
 	
