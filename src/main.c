@@ -16,7 +16,5 @@ int main()
 			break ;
 		free(line);
 	}
-
-	// free(line);
 	return (0);
 }

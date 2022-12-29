@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 17:00:39 by ftroiter          #+#    #+#             */
-/*   Updated: 2022/12/28 20:37:06 by ftroiter         ###   ########.fr       */
+/*   Updated: 2022/12/29 18:35:43 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ t_list *ft_lstlast(t_list *lst)
 	return (lst);
 }
 
-void get_line_pointer(char **line, t_list *stash)
+void allocate_line(char **line, t_list *stash)
 {
 	size_t len;
 	len = 0;
@@ -62,11 +62,8 @@ void get_line_pointer(char **line, t_list *stash)
 		i = 0;
 		while (stash->content[i])
 		{
-			if (stash->content[i] == '\n')
-			{
-				len++;
+			if (stash->content[i] == '\n' && len++)
 				break;
-			}
 			len++;
 			i++;
 		}
@@ -111,38 +108,34 @@ size_t ft_strlen(const char *s)
 	return (count);
 }
 
-int newline_in_stash(t_list *stash)
+char	*newline_in_stash(t_list *stash)
 {
 	int i;
 	t_list *last_node;
-
-	if (stash == NULL)
-		return (0);
+	
+	ERROR_CHECK(!stash);
 	last_node = ft_lstlast(stash);
-
 	return (ft_strchr(last_node->content, '\n'));
 }
 
-// Returns 1 if char c is located in string s, 0 if not.
-int ft_strchr(const char *s, int c)
+// Returns pointer to index of first ocurrence of char c in string s.
+char	*ft_strchr(const char *s, int c)
 {
 	while (*s != (unsigned char)c)
 		if (!*s++)
 			return (0);
-	return (1);
+	return ((char *)s);
 }
 
 void	free_stash(t_list *stash)
 {
-	t_list	*current;
 	t_list	*next;
 
-	current = stash;
-	while (current)
+	while (stash)
 	{
-		free(current->content);
-		next = current->next;
-		free(current);
-		current = next;
+		free(stash->content);
+		next = stash->next;
+		free(stash);
+		stash = next;
 	}
 }
