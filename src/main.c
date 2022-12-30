@@ -8,13 +8,12 @@ int main()
 
 	fd = open("../tests/test_file", O_RDONLY);
 	// printf("%s", get_next_line(fd));
-	while (1)
+	line = get_next_line(fd);
+	while (line)
 	{
-		line = get_next_line(fd);
 		printf("%s", line);
-		if (line == NULL)
-			break ;
-		free(line);
+		line = get_next_line(fd);
 	}
+	free(line);
 	return (0);
 }

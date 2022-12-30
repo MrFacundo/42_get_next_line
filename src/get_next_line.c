@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 17:00:37 by ftroiter          #+#    #+#             */
-/*   Updated: 2022/12/29 18:38:17 by ftroiter         ###   ########.fr       */
+/*   Updated: 2022/12/30 01:32:10 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,25 @@
 /*	1. read and stash
 	2. dumps stash into allocated line
 	3. resets stash so that it begins after the extracted line
-	4. checks for EOF */
+	4. free memory when EOF */
 char *get_next_line(int fd)
 {
 	char *line;
 	static t_list *stash = NULL;
-	/* EC on open function in main()
-	|| the buffer set on compilation is invalid ||
-	the fd ain't readeable */
-	ERROR_CHECK(fd < 0 || BUFFER_SIZE <= 0 || read(fd, &line, 0) < 0);
-	line = NULL; // reset variable after error check
-	fd_to_stash(fd, &stash); // 1. read and stash
+	/* EC on open function in main() || the fd ain't readeable
+	|| the buffer set on compilation is invalid */
+	ERROR_CHECK(fd < 0 || read(fd, &line, 0) < 0
+		||  BUFFER_SIZE <= 0 || BUFFER_SIZE > MAX_FILE_DESCRIPTOR);
+	fd_to_stash(fd, &stash); // 1.
 	ERROR_CHECK(!stash); // EC file is empty
-	stash_to_line(&line, stash); // 2. dumps stash into allocated line
-	remove_line_from_stash(&stash); // 3. resets stash so that it begins after the extracted line
-	if (line[0] == '\0') // 4. checks for EOF
+	stash_to_line(&line, stash); // 2. 
+	remove_line_from_stash(&stash); // 3.
+	if (line[0] == '\0') // 4. 
 	{
 		free_stash(stash);
 		stash = NULL;
 		free(line);
-		return (NULL);
+		return (0);
 	}
 	return (line);
 }
@@ -53,23 +52,22 @@ int fd_to_stash(int fd, t_list **stash)
 		buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 		ERROR_CHECK(!buffer);
 		chars_read = read(fd, buffer, BUFFER_SIZE);
-		/*	EC file is empty || can't read() fd.
-		last check might be redundant */
-		if ((*stash == NULL && chars_read == 0) || chars_read == -1)
+		/*	EC file is empty || can't read() fd */
+		if ((!*stash && !chars_read) || chars_read < 0)
 		{
 			free(buffer);
 			return (0);
 		}
 		buffer[chars_read] = '\0';
-		add_buffer_to_stash(stash, buffer, chars_read);
+		add_buffer_to_stash(stash, buffer);
 		free(buffer);
 	}
 	return (1);
 }
 
-/* creates a node with a duplicate of the buffer
-as content and ads it to the end of the stash */
-void add_buffer_to_stash(t_list **stash, char *buffer, int chars_read)
+/* adds a node with a duplicate of the buffer
+as content to the end of the stash */
+void add_buffer_to_stash(t_list **stash, char *buffer)
 {
 	t_list *new_node;
 
@@ -77,7 +75,7 @@ void add_buffer_to_stash(t_list **stash, char *buffer, int chars_read)
 	ft_lstadd_back(stash, new_node);
 }
 
-/*allocates a line and dumps the stash content into it*/
+/* allocates a line and dumps the stash content into it*/
 int stash_to_line(char **line, t_list *stash)
 {
 	int i;
@@ -86,7 +84,6 @@ int stash_to_line(char **line, t_list *stash)
 	allocate_line(line, stash);
 	ERROR_CHECK(!*line);
 	j = 0;
-
 	while (stash)
 	{
 		i = 0;
@@ -105,7 +102,8 @@ int stash_to_line(char **line, t_list *stash)
 	return 1;
 }
 
-// resets stash so that it begins after the extracted line
+/* resets stash so it begins after the extracted line
+nul char is added to signal EOF */ 
 void remove_line_from_stash(t_list **stash)
 {
 	t_list *last;
@@ -115,38 +113,11 @@ void remove_line_from_stash(t_list **stash)
 
 	last = ft_lstlast(*stash);
 	i = 0;
-	/* get index of the end of the last node's content */
-	while (last->content[i])
-	{
-		i++;
-		if (last->content[i] == '\n' && i++) break;
-	}
-	/* create a node with content starting at that index, reset stash */
-	clean_content = ft_strdup(&last->content[i]);
+	if (ft_strchr(last->content, '\n'))
+		clean_content = ft_strdup(ft_strchr(last->content, '\n') + 1);
+	else
+		clean_content = ft_strdup(last->content);
 	new_node = ft_lstnew(clean_content);
 	free_stash(*stash); 
 	*stash = new_node;
 }
-
-// void remove_line_from_stash(t_list **stash) (REFACTOR)
-// {
-// 	t_list *last;
-// 	t_list *new_node;
-// 	char *clean_content;
-// 	int i;
-
-// 	last = ft_lstlast(*stash);
-// 	i = 0;
-// 	// clean_content = '\0';
-// 	if (ft_strchr(last->content, '\n'))
-// 	{
-// 		clean_content = ft_strdup(ft_strchr(last->content, '\n') + 1);
-// 	}
-// 	else
-// 	{
-// 		clean_content = ft_strdup("");
-// 	}
-
-// 	new_node = ft_lstnew(clean_content);
-// 	free_stash(*stash);
-// }
