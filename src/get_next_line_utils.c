@@ -6,91 +6,38 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 17:00:39 by ftroiter          #+#    #+#             */
-/*   Updated: 2022/12/30 20:18:55 by ftroiter         ###   ########.fr       */
+/*   Updated: 2022/12/30 21:34:30 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./get_next_line.h"
 
-void	allocate_line(char **line, t_list *stash)
+char	*ft_strchr(const char *s, int c)
 {
-	size_t	len;
+	while (*s != (unsigned char)c)
+		if (!*s++)
+			return (0);
+	return ((char *)s);
+}
 
-	len = 0;
-	while (stash)
+char	*ft_substr(const char *s, unsigned int start, size_t len)
+{
+	char	*buffer;
+
+	if (!s)
+		return (0);
+	if (ft_strlen(s) < start)
 	{
-		if (!ft_strchr(stash->content, '\n'))
-			len += ft_strlen(stash->content);
-		else
-			len += ft_strlen(stash->content) - ft_strlen(ft_strchr(stash->content, '\n') + 1);
-		stash = stash->next;
+		len = 0;
+		start = 0;
 	}
-	*line = malloc(sizeof(char) * (len + 1));
-}
-
-void	free_stash(t_list *stash)
-{
-	t_list	*next;
-
-	while (stash)
-	{
-		free(stash->content);
-		next = stash->next;
-		free(stash);
-		stash = next;
-	}
-}
-
-t_list	*ft_lstnew(char *content)
-{
-	t_list	*res;
-
-	res = malloc(sizeof(t_list));
-	if (!res)
-		return (NULL);
-	res->content = content;
-	res->next = NULL;
-	return (res);
-}
-
-void	ft_lstadd_back(t_list **lst, t_list *new)
-{
-	t_list	*last;
-
-	last = ft_lstlast(*lst);
-	if (!last)
-		*lst = new;
-	else
-		last->next = new;
-}
-
-t_list	*ft_lstlast(t_list *lst)
-{
-	if (!lst)
-		return (NULL);
-	while (lst->next)
-		lst = lst->next;
-	return (lst);
-}
-
-char	*ft_strdup(const char *s)
-{
-	char	*ptr;
-	size_t	size;
-	size_t	i;
-
-	size = ft_strlen(s) + 1;
-	ptr = (char *)malloc(sizeof(*s) * size);
-	if (!ptr)
-		return (NULL);
-	i = 0;
-	while (i < size - 1 && *s)
-	{
-		ptr[i] = s[i];
-		i++;
-	}
-	ptr[i] = 0;
-	return (ptr);
+	if (ft_strlen(s + start) < len)
+		len = ft_strlen(s + start);
+	buffer = malloc(sizeof(char) * (len + 1));
+	if (!buffer)
+		return (0);
+	ft_strlcpy(buffer, s + start, len + 1);
+	return (buffer);
 }
 
 size_t	ft_strlen(const char *s)
@@ -103,10 +50,43 @@ size_t	ft_strlen(const char *s)
 	return (count);
 }
 
-char	*ft_strchr(const char *s, int c)
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
-	while (*s != (unsigned char)c)
-		if (!*s++)
-			return (0);
-	return ((char *)s);
+	size_t	i;
+
+	i = 0;
+	if (size)
+	{
+		while (i < size - 1 && src[i])
+		{
+			dst[i] = src[i];
+			i++;
+		}
+		dst[i] = 0;
+	}
+	i = 0;
+	while (src[i])
+		i++;
+	return (i);
+}
+
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*buffer;
+	size_t	i;
+	size_t	j;
+
+	buffer = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!buffer)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (s1[i])
+		buffer[j++] = s1[i++];
+	i = 0;
+	while (s2[i])
+		buffer[j++] = s2[i++];
+	buffer[j] = 0;
+	return (buffer);
 }
