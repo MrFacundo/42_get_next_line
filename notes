@@ -33,4 +33,8 @@ void add to stash
 	else add new node as last
 	
 gcc -Wall -Wextra -Werror -D BUFFER_SIZE=5 main.c get_next_line.c get_next_line_utils.c ../include/get_next_line.h -o main
-clr & gcc -Wall -Wextra -Werror -D BUFFER_SIZE=5 main.c get_next_line.c get_next_line_utils.c ../include/get_next_line.h -o main
+clr & gcc -Wall -Wextra -Werror -D BUFFER_SIZE=5 main.c get_next_line.c get_next_line_utils.c get_next_line.h -o main
+
+valgrind
+gcc ... # add -ggdb3 to it
+valgrind main --leak-check=full

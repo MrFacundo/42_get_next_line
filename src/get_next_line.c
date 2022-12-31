@@ -3,22 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 17:00:37 by ftroiter          #+#    #+#             */
-/*   Updated: 2022/12/30 21:46:24 by ftroiter         ###   ########.fr       */
+/*   Updated: 2022/12/31 13:58:08 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./get_next_line.h"
 
-
 /* while no newlines are found, reads file descriptor into a buffer,
 a BUFFER_SIZE amount of bytes, nul terminates bufferfer and adds it to a stash */
-void	fd_to_stash(int fd, char *buffer, char **stash)
+void fd_to_stash(int fd, char *buffer, char **stash)
 {
-	int		chars_read;
-	char	*tmp;
+	int chars_read;
+	char *tmp;
 
 	if (!*stash || !ft_strchr(*stash, '\n'))
 	{
@@ -35,7 +34,7 @@ void	fd_to_stash(int fd, char *buffer, char **stash)
 				free(tmp);
 			}
 			if (ft_strchr(buffer, '\n'))
-				break ;
+				break;
 			chars_read = read(fd, buffer, BUFFER_SIZE);
 		}
 	}
@@ -43,14 +42,12 @@ void	fd_to_stash(int fd, char *buffer, char **stash)
 }
 
 /* returns a string containing a line */
-char	*stash_to_line(char *stash)
+char *stash_to_line(char *stash)
 {
-	int		i;
-	int		j;
-	char	*ret;
-	char	*tmp;
+	int i;
+	int j;
 
-	if (!stash)
+	if (!stash || !*stash)
 		return (0);
 	if (!ft_strchr(stash, '\n'))
 		return ft_substr(stash, 0, ft_strlen(stash));
@@ -60,31 +57,33 @@ char	*stash_to_line(char *stash)
 }
 
 /* resets stash and frees memory*/
-char	*clear_stash(char **stash)
+void clear_stash(char **stash)
 {
-	int		i;
-	int		j;
-	char	*tmp;
+	int j;
+	char *tmp;
 
 	if (!ft_strchr(*stash, '\n'))
 	{
 		free(*stash);
 		*stash = 0;
 	}
-	tmp = *stash;
-	*stash = ft_substr(ft_strchr(*stash, '\n'), 1, j - 1);
-	free(tmp);
+	else
+	{
+		j = ft_strlen(ft_strchr(*stash, '\n'));
+		tmp = *stash;
+		*stash = ft_substr(ft_strchr(*stash, '\n'), 1, j - 1);
+		free(tmp);
+	}
 }
 
 /*	1. reads and stashes fd
 	2. dumps stash into allocated line
 	3. resets stash s and frees memory */
-char	*get_next_line(int fd)
+char *get_next_line(int fd)
 {
-	static char	*stash;
-	char		*buffer;
-	char		*ret;
-
+	static char *stash;
+	char *buffer;
+	char *ret;
 
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
@@ -92,10 +91,13 @@ char	*get_next_line(int fd)
 	if (BUFFER_SIZE < 1 || fd == -1 || fd > FD_MAX || read(fd, buffer, 0) == -1)
 	{
 		free(buffer);
+		free(stash);
+		stash = 0;
 		return (0);
 	}
-	fd_to_stash(fd, buffer, stash);
-	ret = stash_to_line(&stash);
-	clear_stash(&stash);
+	fd_to_stash(fd, buffer, &stash);
+	ret = stash_to_line(stash);
+	if (stash)
+		clear_stash(&stash);
 	return (ret);
 }
