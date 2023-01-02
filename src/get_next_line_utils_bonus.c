@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 23:24:22 by facu              #+#    #+#             */
-/*   Updated: 2023/01/01 23:30:46 by facu             ###   ########.fr       */
+/*   Updated: 2023/01/02 21:17:48 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "./get_next_line_bonus.h"
 

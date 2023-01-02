@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 17:00:37 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/01/01 21:19:47 by facu             ###   ########.fr       */
+/*   Updated: 2023/01/02 21:34:47 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 /* reads file descriptor into a buffer,
 a BUFFER_SIZE amount of bytes, nul terminates buffer
 and adds it to a stash */
-void fd_to_stash(int fd, char *buffer, char **stash)
+void	fd_to_stash(int fd, char *buffer, char **stash)
 {
-	int chars_read;
-	char *tmp;
+	int		chars_read;
+	char	*tmp;
 
 	if (!*stash)
 	{
@@ -36,7 +36,7 @@ void fd_to_stash(int fd, char *buffer, char **stash)
 			*stash = ft_strjoin(*stash, buffer);
 			free(tmp);
 			if (ft_strchr(buffer, '\n'))
-				break;
+				break ;
 			chars_read = read(fd, buffer, BUFFER_SIZE);
 		}
 	}
@@ -44,10 +44,10 @@ void fd_to_stash(int fd, char *buffer, char **stash)
 }
 
 /* returns a string containing a line */
-char *stash_to_line(char *stash)
+char	*stash_to_line(char *stash)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	if (!stash || !*stash)
 		return (0);
@@ -59,10 +59,10 @@ char *stash_to_line(char *stash)
 }
 
 /* resets stash and frees memory*/
-void clear_stash(char **stash)
+void	clear_stash(char **stash)
 {
-	int j;
-	char *tmp;
+	int		j;
+	char	*tmp;
 
 	if (!ft_strchr(*stash, '\n'))
 	{
@@ -81,16 +81,16 @@ void clear_stash(char **stash)
 /*	1. reads and stashes fd
 	2. dumps stash into malloc allocated line
 	3. resets stash and frees memory */
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
-	static char *stash;
-	char *buffer;
-	char *ret;
+	static char	*stash;
+	char		*buffer;
+	char		*ret;
 
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
 		return (0);
-	if (BUFFER_SIZE < 1 || fd > FD_MAX || read(fd, buffer, 0) == -1)
+	if (BUFFER_SIZE < 1 || fd > FOPEN_MAX || read(fd, buffer, 0) == -1)
 	{
 		free(buffer);
 		free(stash);

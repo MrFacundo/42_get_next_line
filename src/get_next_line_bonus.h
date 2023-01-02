@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/01 23:24:17 by facu              #+#    #+#             */
-/*   Updated: 2023/01/02 00:06:09 by facu             ###   ########.fr       */
+/*   Updated: 2023/01/02 21:33:06 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@
 # include <stdlib.h> // malloc
 # include <unistd.h> // read
 # include <stdio.h> // FOPEN_MAX, printf
-// # include <limits.h> // OPEN_MAX
 
-# define FD_MAX 1024
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 5
 # endif
