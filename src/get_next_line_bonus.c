@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/27 17:00:37 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/01/01 21:19:47 by facu             ###   ########.fr       */
+/*   Created: 2023/01/01 23:24:07 by facu              #+#    #+#             */
+/*   Updated: 2023/01/02 01:21:27 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./get_next_line.h"
+#include "./get_next_line_bonus.h"
 
 /* while no newlines are found, reads file descriptor into a buffer,
 a BUFFER_SIZE amount of bytes, nul terminates bufferfer
@@ -82,23 +82,23 @@ void	clear_stash(char **stash)
 	3. resets stash s and frees memory */
 char	*get_next_line(int fd)
 {
-	static char	*stash;
+	static char	*stash[FOPEN_MAX];
 	char		*buffer;
 	char		*ret;
 
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
 		return (0);
-	if (BUFFER_SIZE < 1 || fd == -1 || fd > FD_MAX || read(fd, buffer, 0) == -1)
+	if (BUFFER_SIZE < 1 || fd == -1 || fd > FOPEN_MAX || read(fd, buffer, 0) == -1)
 	{
 		free(buffer);
-		free(stash);
-		stash = 0;
+		// free(stash[fd]);
+		// stash[fd] = 0;
 		return (0);
 	}
-	fd_to_stash(fd, buffer, &stash);
-	ret = stash_to_line(stash);
-	if (stash)
-		clear_stash(&stash);
+	fd_to_stash(fd, buffer, &stash[fd]);
+	ret = stash_to_line(stash[fd]);
+	if (stash[fd] )
+		clear_stash(&stash[fd]);
 	return (ret);
 }

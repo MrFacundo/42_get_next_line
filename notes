@@ -38,3 +38,9 @@ clr & gcc -Wall -Wextra -Werror -D BUFFER_SIZE=5 main.c get_next_line.c get_next
 valgrind
 gcc ... # add -ggdb3 to it
 valgrind main --leak-check=full
+
+
+BONUS
+
+clr & gcc -Wall -Wextra -Werror -D BUFFER_SIZE=5 main.c get_next_line_bonus.c get_next_line_utils_bonus.c get_next_line_bonus.h -o main
+
