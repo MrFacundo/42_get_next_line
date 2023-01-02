@@ -12,30 +12,31 @@
 
 #include "./get_next_line_bonus.h"
 
-/* while no newlines are found, reads file descriptor into a buffer,
-a BUFFER_SIZE amount of bytes, nul terminates bufferfer
+/* reads file descriptor into a buffer,
+a BUFFER_SIZE amount of bytes, nul terminates buffer
 and adds it to a stash */
-void	fd_to_stash(int fd, char *buffer, char **stash)
+void fd_to_stash(int fd, char *buffer, char **stash)
 {
-	int		chars_read;
-	char	*tmp;
+	int chars_read;
+	char *tmp;
 
-	if (!*stash || !ft_strchr(*stash, '\n'))
+	if (!*stash)
+	{
+		chars_read = read(fd, buffer, BUFFER_SIZE);
+		buffer[chars_read] = 0;
+		*stash = ft_substr(buffer, 0, chars_read);
+	}
+	if (!ft_strchr(*stash, '\n'))
 	{
 		chars_read = read(fd, buffer, BUFFER_SIZE);
 		while (chars_read > 0)
 		{
 			buffer[chars_read] = 0;
-			if (!*stash)
-				*stash = ft_substr(buffer, 0, chars_read);
-			else
-			{
-				tmp = *stash;
-				*stash = ft_strjoin(*stash, buffer);
-				free(tmp);
-			}
+			tmp = *stash;
+			*stash = ft_strjoin(*stash, buffer);
+			free(tmp);
 			if (ft_strchr(buffer, '\n'))
-				break ;
+				break;
 			chars_read = read(fd, buffer, BUFFER_SIZE);
 		}
 	}
@@ -43,10 +44,10 @@ void	fd_to_stash(int fd, char *buffer, char **stash)
 }
 
 /* returns a string containing a line */
-char	*stash_to_line(char *stash)
+char *stash_to_line(char *stash)
 {
-	int	i;
-	int	j;
+	int i;
+	int j;
 
 	if (!stash || !*stash)
 		return (0);
@@ -58,10 +59,10 @@ char	*stash_to_line(char *stash)
 }
 
 /* resets stash and frees memory*/
-void	clear_stash(char **stash)
+void clear_stash(char **stash)
 {
-	int		j;
-	char	*tmp;
+	int j;
+	char *tmp;
 
 	if (!ft_strchr(*stash, '\n'))
 	{
@@ -80,25 +81,30 @@ void	clear_stash(char **stash)
 /*	1. reads and stashes fd
 	2. dumps stash into allocated line
 	3. resets stash s and frees memory */
-char	*get_next_line(int fd)
+char *get_next_line(int fd)
 {
-	static char	*stash[FOPEN_MAX];
-	char		*buffer;
-	char		*ret;
+	static char *stash[FOPEN_MAX];
+	char *buffer;
+	char *ret;
 
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
 		return (0);
-	if (BUFFER_SIZE < 1 || fd == -1 || fd > FOPEN_MAX || read(fd, buffer, 0) == -1)
+	if (BUFFER_SIZE < 1 || fd < 0 || fd > FOPEN_MAX)
 	{
 		free(buffer);
-		// free(stash[fd]);
-		// stash[fd] = 0;
+		return (0);
+	}
+	if (read(fd, buffer, 0) == -1)
+	{
+		free(buffer);
+		free(stash[fd]);
+		stash[fd] = 0;
+		*stash = 0;
 		return (0);
 	}
 	fd_to_stash(fd, buffer, &stash[fd]);
 	ret = stash_to_line(stash[fd]);
-	if (stash[fd] )
-		clear_stash(&stash[fd]);
+	clear_stash(&stash[fd]);
 	return (ret);
 }
