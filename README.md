@@ -30,7 +30,20 @@ read from a file descriptor.
 - malloc()
 - free()
 
+## Versions
 
-### The function works by the grace of God and because I implemented the following logic: 
+![gnl](https://i.pinimg.com/236x/dc/ae/f4/dcaef4b4c977db0c08f5d03f7c50acc1.jpg)
 
-![diagram](gnl_flowchart.png)
+[GNL](https://github.com/MrFacundo/42_get_next_line/tree/main/gnl)
+
+![gnl](https://i.pinimg.com/236x/dd/f7/76/ddf77645a550ac08d3d79418108bea27.jpg)	
+
+[GNL list implementation](https://github.com/MrFacundo/42_get_next_line/tree/main/gnl_linked_lists)
+
+![gnl](https://i.pinimg.com/236x/7f/08/9b/7f089bbc1b935dea729dc2a709f21707.jpg)
+
+[GNL Bonus](https://github.com/MrFacundo/42_get_next_line/tree/main/gnl_bonus)
+
+![gnl](https://i.pinimg.com/236x/a4/b1/c9/a4b1c9b18cbd7be336c5de6c8600f5ad.jpg)
+
+[GNL shorter, learneable bonus version](https://github.com/MrFacundo/42_get_next_line/tree/main/gnl_short)

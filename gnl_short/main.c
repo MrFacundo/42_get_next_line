@@ -8,13 +8,13 @@ int main()
 	char *line;
 
 	fd = open("../tests/lines_around_10.txt", O_RDONLY);
-	line = gnl_short(fd);
+	line = get_next_line(fd);
 	printf("%s", line);
-	line = gnl_short(fd);
+	line = get_next_line(fd);
 	printf("%s", line);
-	line = gnl_short(fd);
+	line = get_next_line(fd);
 	printf("%s", line);
-	line = gnl_short(fd);
+	line = get_next_line(fd);
 	printf("%s", line);
 	close(fd);
 	free(line);

@@ -62,7 +62,7 @@ int	reset_buffer(char *buffer)
 	return has_nl;
 }
 
-char	*gnl_short(int fd)
+char	*get_next_line(int fd)
 {
 	static char	buffer[FOPEN_MAX][BUFFER_SIZE + 1];
 	int i;
