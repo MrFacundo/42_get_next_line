@@ -31,4 +31,9 @@ size_t	ft_strlen(const char *s);
 char	*ft_strjoin(const char *s1, const char *s2);
 size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 
+
+/* get_next_line_short.c */
+char	*gnl_short(int fd);
+
+
 #endif
