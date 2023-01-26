@@ -1,12 +1,19 @@
+COMPILING
+
 gcc -Wall -Wextra -Werror -D BUFFER_SIZE=5 main.c get_next_line.c get_next_line_utils.c ../include/get_next_line.h -o main
 clr & gcc -Wall -Wextra -Werror -D BUFFER_SIZE=5 main.c get_next_line.c get_next_line_utils.c get_next_line.h -o main
-
-valgrind
-gcc ... # add -ggdb3 to it
-valgrind main --leak-check=full
-
 
 BONUS
 
 clr & gcc -Wall -Wextra -Werror -D BUFFER_SIZE=5 main.c get_next_line_bonus.c get_next_line_utils_bonus.c get_next_line_bonus.h -o main
 
+VALGRIND
+gcc ... # add -ggdb3 to it
+valgrind main --leak-check=full
+
+LLDB
+gcc -g tests/main.c -Wall -Wextra -Werror -D BUFFER_SIZE=1 get_next_line.c get_next_line_utils.c
+lldb a.out
+b get_next_line
+run tests/files/part1_test01_with_lines
+gui
