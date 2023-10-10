@@ -4,6 +4,9 @@
 		"*.js": "javascriptreact",
 		"get_next_line.h": "c",
 		"get_next_line_bonus.h": "c",
-		"fcntl.h": "c"
+		"fcntl.h": "c",
+		"stdlib.h": "c",
+		"stdio.h": "c",
+		"unistd.h": "c"
 	}
 }

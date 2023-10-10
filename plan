@@ -1,0 +1,34 @@
+libraries
+fcntl // open
+# include <stdlib.h> // malloc
+# include <unistd.h> // read
+# include <stdio.h> // FOPEN_MAX, printf
+
+main
+	open a file
+	while line 
+		printf gnl fd
+
+gnl
+	declare a static array of an fopenmax amount of strings of size buffer size  + 1
+	check file descriptor is no more than fopen max, no less than 0 and buffersize is at least 1
+	check fd is readeable using read fd, 0, 0
+		clean buffer if not readeable
+	main loop:
+		while theres something on the buffer or something is read from the fd
+			join line and buffer
+			clear buffer or leave everything after a newline if there is a newline in it
+			if there is a newline, also break
+	return the line
+
+join line and buffer
+	allocate a ret string with the size of the line plus the buffer
+	copy the line into the ret string
+	copy the buffer into the ret string, up to a newline
+	nul terminate the ret line
+
+clear the buffer up to a newline character
+	while the length of the buffer
+	turn everything into nul
+	if theres a newline, copy everything after the newline to the beggining of the buffer
+	return wethe
